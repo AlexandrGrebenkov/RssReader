@@ -17,5 +17,13 @@ namespace RssReader.Models
 
         /// <summary>Ссылка на сообщение</summary>
         public string Link { get; }
+
+        public RssMessage(string title, string text, DateTime date, string link)
+        {
+            Title = title;
+            Text = text;
+            Date = date;
+            Link = link;
+        }
     }
 }

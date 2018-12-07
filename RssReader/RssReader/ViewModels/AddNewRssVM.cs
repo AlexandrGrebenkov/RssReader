@@ -3,25 +3,65 @@ using RssReader.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Xamarin.Forms;
 
 namespace RssReader.ViewModels
 {
     class AddNewRssVM : BaseViewModel
     {
-        Rss _Current;
-        public Rss Current
+        Rss Current;
+        Rss Original;
+
+        string _Name;
+        /// <summary>Имя</summary>
+        public string Name
         {
-            get { return _Current; }
-            set { SetProperty(ref _Current, value); }
+            get { return _Name; }
+            set
+            {
+                SetProperty(ref _Name, value);
+                NameError = string.Empty;
+                if (string.IsNullOrWhiteSpace(Name))
+                    NameError = "Имя не может быть пустым";
+                cmdSave?.RaiseCanExecuteChanged();
+            }
         }
 
-        Rss _Original;
-        public Rss Original
+        string _NameError;
+        /// <summary>Ошибка ввода имени</summary>
+        public string NameError
         {
-            get { return _Original; }
-            set { SetProperty(ref _Original, value); }
+            get { return _NameError; }
+            set { SetProperty(ref _NameError, value); }
         }
+
+        string _Link;
+        /// <summary>Ссылка</summary>
+        public string Link
+        {
+            get { return _Link; }
+            set
+            {
+                SetProperty(ref _Link, value);
+                LinkError = string.Empty;
+                if (string.IsNullOrWhiteSpace(Link))
+                    LinkError = "Ссылка не может быть пустой";
+                if (!linkRegex.IsMatch(Link))
+                    LinkError = "Ошибка формата ссылки";
+                cmdSave?.RaiseCanExecuteChanged();
+            }
+        }
+
+        string _LinkError;
+        /// <summary>Ошибка ввода ссылки</summary>
+        public string LinkError
+        {
+            get { return _LinkError; }
+            set { SetProperty(ref _LinkError, value); }
+        }
+
+        Regex linkRegex = new Regex(@"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
 
         INavigation navigation;
         bool IsNew;
@@ -31,7 +71,7 @@ namespace RssReader.ViewModels
             this.navigation = navigation;
             Title = "Создание";
             IsNew = true;
-            Original = new Rss("1", "2");
+            Original = new Rss("", "");
             Current = (Rss)Original.Clone();
 
             cmdSave = new RelayCommand(() =>
@@ -39,7 +79,8 @@ namespace RssReader.ViewModels
                 Original = (Rss)Current.Clone();
                 MessagingCenter.Send(this, "AddRss", Original);
                 navigation.PopAsync();
-            });
+            }, () => string.IsNullOrWhiteSpace(NameError) &&
+                    string.IsNullOrWhiteSpace(LinkError));
         }
 
         public AddNewRssVM(INavigation navigation, Rss rss)
@@ -56,7 +97,8 @@ namespace RssReader.ViewModels
                 Original = (Rss)Current.Clone();
                 MessagingCenter.Send(this, "AddRss", Original);
                 navigation.PopAsync();
-            });
+            }, () => string.IsNullOrWhiteSpace(NameError) &&
+                    string.IsNullOrWhiteSpace(LinkError));
         }
 
         public RelayCommand cmdSave { get; }

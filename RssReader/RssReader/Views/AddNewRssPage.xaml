@@ -10,10 +10,13 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Название:"/>
-            <Entry Text="{Binding Current.Name}" Placeholder="Введите имя"/>
+            <Entry Text="{Binding Name}" Placeholder="Введите имя"/>
+            <Label Text="{Binding NameError}" Style="{StaticResource ErrorText}"/>
 
             <Label Text="Путь:"/>
-            <Entry Text="{Binding Current.Link}" Placeholder="Введите ссылку"/>
+            <Entry Text="{Binding Link}" Placeholder="Введите ссылку"/>
+            <Label Text="{Binding LinkError}" Style="{StaticResource ErrorText}"/>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

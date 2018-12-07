@@ -1,5 +1,6 @@
 ﻿using Helpers;
 using RssReader.Models;
+using RssReader.Services;
 using RssReader.Views;
 using System;
 using System.Collections.Generic;
@@ -20,18 +21,30 @@ namespace RssReader.ViewModels
             set { SetProperty(ref _RssList, value); }
         }
 
-        public RssListVM(INavigation navigation)
+        public RssListVM(INavigation navigation, IFileWorker fileWorker)
         {
             Title = "Список Rss";
-            RssList = new ObservableCollection<Rss>
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                var loaded = await fileWorker.LoadRssListAsync(async error => await DisplayAlert("Error", error, "", "Ok"));
+                if (loaded == null)
+                {
+                    RssList = new ObservableCollection<Rss>
                 {
                     new Rss("Calend", "http://www.calend.ru/img/export/calend.rss"),
                     new Rss("Old Hard", "http://www.old-hard.ru/rss"),
                 };
+                }
+                else
+                    RssList = new ObservableCollection<Rss>(loaded);
+            });
+            
 
             MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "AddRss", (obj, rss) =>
             {
-                RssList?.Add(rss);
+                if (RssList == null) return;
+                RssList.Add(rss);
+                fileWorker.SaveRssListAsync(RssList, async error => await DisplayAlert("Error", error, "", "Ok"));
             });
 
             cmdAdd = new RelayCommand(() => navigation.PushAsync(new AddNewRssPage()));

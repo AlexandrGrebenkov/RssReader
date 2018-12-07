@@ -25,5 +25,7 @@ namespace RssReader.Models
             Date = date;
             Link = link;
         }
+
+        private RssMessage() { }
     }
 }

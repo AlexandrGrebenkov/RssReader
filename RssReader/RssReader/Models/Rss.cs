@@ -48,5 +48,7 @@ namespace RssReader.Models
         }
 
         public object Clone() => new Rss(Name, Link);
+
+        private Rss() { }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Helpers;
 using RssReader.Models;
+using RssReader.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,6 @@ namespace RssReader.ViewModels
 {
     class RssListVM : BaseViewModel
     {
-
         ObservableCollection<Rss> _RssList;
         /// <summary>Список Rss-каналов</summary>
         public ObservableCollection<Rss> RssList
@@ -20,21 +20,20 @@ namespace RssReader.ViewModels
             set { SetProperty(ref _RssList, value); }
         }
 
-        public RssListVM()
+        public RssListVM(INavigation navigation)
         {
             Title = "Список Rss";
             RssList = new ObservableCollection<Rss>
                 { new Rss("Name 1", "http://123"), new Rss("Name 2", "222"), };
 
-            cmdAdd = new RelayCommand(() =>
+            MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "AddRss", (obj, rss) =>
             {
-
+                RssList?.Add(rss);
             });
 
-            cmdSelect = new Command<Rss>(rss =>
-            {
+            cmdAdd = new RelayCommand(() => navigation.PushAsync(new AddNewRssPage()));
 
-            });
+            cmdSelect = new Command<Rss>(rss => navigation.PushAsync(new RssPage(rss)));
 
             cmdContextAction = new Command<Rss>(async rss =>
             {
@@ -45,6 +44,7 @@ namespace RssReader.ViewModels
                 {
                     case "Изменить":
                     {
+                        await navigation.PushAsync(new AddNewRssPage(rss));
                         break;
                     }
                     case "Удалить":

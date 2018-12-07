@@ -12,7 +12,7 @@ namespace RssReader.Views
 		public RssListPage ()
 		{
 			InitializeComponent ();
-            BindingContext = new RssListVM();
+            BindingContext = new RssListVM(Navigation);
 		}
 
         #region Для отображения диалоговых окон из VM

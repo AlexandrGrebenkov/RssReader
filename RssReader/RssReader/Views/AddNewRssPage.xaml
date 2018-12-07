@@ -1,12 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RssReader.Views.AddNewRssPage">
+             x:Class="RssReader.Views.AddNewRssPage"
+             BackgroundColor="{StaticResource clrBackground}"
+             Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Сохранить" Command="{Binding cmdSave}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Название:"/>
+            <Entry Text="{Binding Current.Name}" Placeholder="Введите имя"/>
+
+            <Label Text="Путь:"/>
+            <Entry Text="{Binding Current.Link}" Placeholder="Введите ссылку"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

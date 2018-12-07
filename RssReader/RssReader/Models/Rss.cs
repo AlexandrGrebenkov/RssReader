@@ -21,8 +21,13 @@ namespace RssReader.Models
             set { SetProperty(ref _Link, value); }
         }
 
+        IEnumerable<RssMessage> _Messages;
         /// <summary>Список сообщений</summary>
-        IEnumerable<RssMessage> RssMessages { get; set; }
+        public IEnumerable<RssMessage> Messages
+        {
+            get { return _Messages; }
+            set { SetProperty(ref _Messages, value); }
+        }
 
         public bool IsValid { get; }
 

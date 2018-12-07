@@ -1,5 +1,6 @@
 ﻿using Helpers;
 using RssReader.Models;
+using RssReader.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace RssReader.Views
 		public RssPage (Rss rss)
 		{
 			InitializeComponent ();
+            BindingContext = new RssVM(rss);
 		}
 
         #region Для отображения диалоговых окон из VM

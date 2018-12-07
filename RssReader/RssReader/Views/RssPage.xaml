@@ -1,12 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RssReader.Views.RssPage">
+             x:Class="RssReader.Views.RssPage"
+             xmlns:conv="clr-namespace:Helpers.Converters"
+             xmlns:h="clr-namespace:Helpers"
+             BackgroundColor="{StaticResource clrBackground}"
+             Title="{Binding Title}"
+             x:Name="pRss">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ListView ItemsSource="{Binding Rss.Messages}" RowHeight="60"
+                  IsPullToRefreshEnabled="True"
+                  RefreshCommand="{Binding cmdRefresh}"
+                  IsRefreshing="{Binding IsBusy}">
+            <ListView.Behaviors>
+                <h:EventToCommandBehavior EventName="ItemTapped" Command="{Binding cmdSelect}" 
+                                          EventArgsConverter="{StaticResource ItemTappedConverter}" />
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <StackLayout Margin="8,0,0,0" VerticalOptions="Center" Spacing="2">
+                                <Label Text="{Binding Title}"/>
+                                <Label Text="{Binding Link}" Style="{StaticResource LightText}"/>
+                            </StackLayout>
+                            <Button Grid.Column="1" Style="{StaticResource ContextButtonStyle}" Grid.RowSpan="2"
+                                    Command="{Binding Source={x:Reference pRssList}, Path=BindingContext.cmdContextAction}" 
+                                    CommandParameter="{Binding .}"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </ContentPage.Content>
 </ContentPage>

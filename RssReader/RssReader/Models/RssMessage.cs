@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Helpers;
+using System;
 
 namespace RssReader.Models
 {
@@ -6,7 +7,7 @@ namespace RssReader.Models
     public class RssMessage
     {
         /// <summary>Заголовок</summary>
-        public string Name { get; }
+        public string Title { get; }
 
         /// <summary>Текст сообщения</summary>
         public string Text { get; }

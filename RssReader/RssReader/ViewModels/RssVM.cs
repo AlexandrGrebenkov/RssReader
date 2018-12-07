@@ -26,7 +26,8 @@ namespace RssReader.ViewModels
 
             cmdSelect = new Command<RssMessage>(message =>
             {
-
+                if (!string.IsNullOrWhiteSpace(message.Link))
+                    Device.OpenUri(new Uri(message.Link));
             });
 
             cmdRefresh = new RelayCommand(async () =>

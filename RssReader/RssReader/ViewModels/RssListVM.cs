@@ -49,6 +49,11 @@ namespace RssReader.ViewModels
                 fileWorker.SaveRssListAsync(RssList, async error => await DisplayAlert("Error", error, "", "Ok"));
             });
 
+            MessagingCenter.Subscribe<RssVM,object>(this, "RssFeedUpdated", (obj, arg) =>
+            {
+                fileWorker.SaveRssListAsync(RssList, async error => await DisplayAlert("Error", error, "", "Ok"));
+            });
+
             cmdAdd = new RelayCommand(() => navigation.PushAsync(new AddNewRssPage()));
 
             cmdSelect = new Command<Rss>(rss => navigation.PushAsync(new RssPage(rss)));

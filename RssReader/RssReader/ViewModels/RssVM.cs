@@ -28,9 +28,12 @@ namespace RssReader.ViewModels
             Rss = rss;
             Title = Rss.Name;
 
-            Task.Run(async () =>
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                Rss.Messages = await GetRssFeed(rss.Link);
+                var messages = await GetRssFeed(rss.Link,
+                    async error => await DisplayAlert("Ошибка", error, "", "Ok"));
+                if (messages != null)
+                    Rss.Messages = messages;
             });
 
             cmdSelect = new Command<RssMessage>(message =>
@@ -42,7 +45,10 @@ namespace RssReader.ViewModels
             cmdRefresh = new RelayCommand(async () =>
             {
                 IsBusy = true;
-                Rss.Messages = await GetRssFeed(rss.Link);
+                var messages = await GetRssFeed(rss.Link,
+                    async error => await DisplayAlert("Ошибка", error, "", "Ok"));
+                if (messages != null)
+                    Rss.Messages = messages;
                 IsBusy = false;
             });
         }
@@ -50,24 +56,51 @@ namespace RssReader.ViewModels
         public ICommand cmdSelect { get; }
         public RelayCommand cmdRefresh { get; }
 
-        private async Task<IEnumerable<RssMessage>> GetRssFeed(string rssLink)
+        private async Task<IEnumerable<RssMessage>> GetRssFeed(string rssLink, Action<string> errorhandler = null)
         {
-            if (client == null)
-                client = new HttpClient();
-            var feed = await client.GetStringAsync(rssLink);
-
-            if (string.IsNullOrEmpty(feed)) return null;
-
-            var parsedFeed = XElement.Parse(feed);
-
-            var messages = new List<RssMessage>();
-
-            foreach (var item in parsedFeed.Element("channel").Elements("item"))
+            string feed = string.Empty;
+            List<RssMessage> messages = null;
+            try
             {
-                var title = item.Element("title");
-                var link = item.Element("link");
+                if (client == null)
+                    client = new HttpClient();
+                feed = await client.GetStringAsync(rssLink);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                errorhandler?.Invoke(ex.Message);
+#else
+                errorhandler?.Invoke("Что-то не так со связью :(");
+#endif
+                return null;
+            }
 
-                messages.Add(new RssMessage(title.Value, "", DateTime.Now, link.Value));
+            try
+            {
+                if (string.IsNullOrEmpty(feed)) return null;
+
+                var parsedFeed = XElement.Parse(feed);
+                messages = new List<RssMessage>();
+
+                foreach (var item in parsedFeed.Element("channel").Elements("item"))
+                {
+                    var title = item.Element("title");
+                    var link = item.Element("link");
+
+                    messages.Add(new RssMessage(title.Value, "", DateTime.Now, link.Value));
+                }
+
+                MessagingCenter.Send(this, "RssFeedUpdated", new object());
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                errorhandler?.Invoke(ex.Message);
+#else
+                errorhandler?.Invoke("Не могу разобрать что сервер прислал :(");
+#endif
+                return null;
             }
 
             return messages;

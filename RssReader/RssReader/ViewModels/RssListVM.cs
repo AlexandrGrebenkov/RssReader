@@ -24,7 +24,10 @@ namespace RssReader.ViewModels
         {
             Title = "Список Rss";
             RssList = new ObservableCollection<Rss>
-                { new Rss("Name 1", "http://123"), new Rss("Name 2", "222"), };
+                {
+                    new Rss("Calend", "http://www.calend.ru/img/export/calend.rss"),
+                    new Rss("Old Hard", "http://www.old-hard.ru/rss"),
+                };
 
             MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "AddRss", (obj, rss) =>
             {

@@ -30,15 +30,17 @@ namespace RssReader.ViewModels
                 if (loaded == null)
                 {
                     RssList = new ObservableCollection<Rss>
-                {
-                    new Rss("Calend", "http://www.calend.ru/img/export/calend.rss"),
-                    new Rss("Old Hard", "http://www.old-hard.ru/rss"),
-                };
+                    {
+                        new Rss("Meteoinfo.ru", "https://meteoinfo.ru/rss/forecasts/index.php?s=28440"),
+                        new Rss("Acomics.ru", "https://acomics.ru/~depth-of-delusion/rss"),
+                        new Rss("Calend.ru", "http://www.calend.ru/img/export/calend.rss"),
+                        new Rss("Old-Hard.ru", "http://www.old-hard.ru/rss"),
+                    };
+                    await fileWorker.SaveRssListAsync(RssList, async error => await DisplayAlert("Error", error, "", "Ok"));
                 }
                 else
                     RssList = new ObservableCollection<Rss>(loaded);
             });
-            
 
             MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "AddRss", (obj, rss) =>
             {
@@ -59,18 +61,18 @@ namespace RssReader.ViewModels
                 switch (answer)
                 {
                     case "Изменить":
-                    {
-                        await navigation.PushAsync(new AddNewRssPage(rss));
-                        break;
-                    }
+                        {
+                            await navigation.PushAsync(new AddNewRssPage(rss));
+                            break;
+                        }
                     case "Удалить":
-                    {
-                        if (await DisplayAlert("Внимание!",
-                            $"Вы действительно хотите удалить рассылку \"{rss.Name}\"",
-                            "Удалить", "Отмена"))
-                            RssList.Remove(rss);
-                        break;
-                    }
+                        {
+                            if (await DisplayAlert("Внимание!",
+                                $"Вы действительно хотите удалить рассылку \"{rss.Name}\"",
+                                "Удалить", "Отмена"))
+                                RssList.Remove(rss);
+                            break;
+                        }
                 }
             });
         }

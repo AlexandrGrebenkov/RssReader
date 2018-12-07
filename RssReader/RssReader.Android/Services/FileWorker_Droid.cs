@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using RssReader.Models;
 using System.IO;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
+using System.Text;
 
 [assembly: Xamarin.Forms.Dependency(typeof(RssReader.Droid.Services.FileWorker_Droid))]
 namespace RssReader.Droid.Services
@@ -25,7 +27,7 @@ namespace RssReader.Droid.Services
         {
             IEnumerable<Rss> result = null;
 
-            string filename = Path.Combine(AppDirectory, "RssFeeds.xml");
+            string filename = Path.Combine(AppDirectory, "RssFeeds.json");
 
             if (!File.Exists(filename))
                 return Task.FromResult(result);
@@ -33,10 +35,13 @@ namespace RssReader.Droid.Services
             try
             {
                 using (var fs = new FileStream(filename, FileMode.Open))
-                using (var reader = new StreamReader(fs))
+                using (var reader = new StreamReader(fs, Encoding.Unicode))
                 {
-                    var xs = new XmlSerializer(typeof(IEnumerable<Rss>));
-                    try { result = (List<Rss>)xs.Deserialize(reader); }
+                    try
+                    {
+                        var s = reader.ReadToEnd();
+                        result = JsonConvert.DeserializeObject<IEnumerable<Rss>>(s);
+                    }
                     catch (Exception ex)
                     {
 #if DEBUG
@@ -61,16 +66,15 @@ namespace RssReader.Droid.Services
         public Task<bool> SaveRssListAsync(IEnumerable<Rss> list, Action<string> errorhandler = null)
         {
 
-            string filename = Path.Combine(AppDirectory, "RssFeeds.xml");
+            string filename = Path.Combine(AppDirectory, "RssFeeds.json");
 
             try
             {
                 using (var fs = new FileStream(filename, FileMode.Create))
-                using (var writer = new StreamWriter(fs))
+                using (var writer = new StreamWriter(fs, Encoding.Unicode))
                 {
-                    var xs = new XmlSerializer(typeof(IEnumerable<Rss>));
-
-                    xs.Serialize(writer, list);
+                    string json = JsonConvert.SerializeObject(list);
+                    writer.Write(json);
                 }
             }
             catch (Exception ex)

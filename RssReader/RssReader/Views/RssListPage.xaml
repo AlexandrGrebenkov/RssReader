@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RssReader.Views.RssListPage"
+             xmlns:conv="clr-namespace:Helpers.Converters"
+             xmlns:h="clr-namespace:Helpers"
+             BackgroundColor="{StaticResource clrBackground}"
+             Title="{Binding Title}"
+             x:Name="pRssList">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Добавить" Command="{Binding cmdAdd}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding RssList}" RowHeight="60">
+            <ListView.Behaviors>
+                <h:EventToCommandBehavior EventName="ItemTapped" Command="{Binding cmdSelect}" 
+                                          EventArgsConverter="{StaticResource ItemTappedConverter}" />
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <StackLayout Margin="8,0,0,0" VerticalOptions="Center" Spacing="2">
+                                <Label Text="{Binding Name}"/>
+                                <Label Text="{Binding Link}" Style="{StaticResource LightText}"/>
+                            </StackLayout>
+                            <Button Grid.Column="1" Style="{StaticResource ContextButtonStyle}" Grid.RowSpan="2"
+                                    Command="{Binding Source={x:Reference pRssList}, Path=BindingContext.cmdContextAction}" 
+                                    CommandParameter="{Binding .}"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

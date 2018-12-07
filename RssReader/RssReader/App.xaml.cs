@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RssReader.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +12,7 @@ namespace RssReader
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new RssListPage());
         }
 
         protected override void OnStart()

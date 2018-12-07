@@ -3,6 +3,93 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RssReader.App">
     <Application.Resources>
+        <ResourceDictionary>
+            <!--Цвета-->
+            <Color x:Key="clrBackground">#EEE</Color>
+            <Color x:Key="clrBlue">#2196F3</Color>
 
+            <!--Шрифты-->
+            <OnIdiom x:TypeArguments="Font" Desktop="35" Tablet="30" Phone="23" x:Key="AccentFontSize" />
+            <OnIdiom x:TypeArguments="Font" Desktop="25" Tablet="20" Phone="17" x:Key="NormalFontSize" />
+            <OnIdiom x:TypeArguments="Font" Desktop="20" Tablet="15" Phone="12" x:Key="ErrorFontSize" />
+            <OnIdiom x:TypeArguments="Font" Desktop="20" Tablet="15" Phone="12" x:Key="SmallFontSize" />
+            <OnIdiom x:TypeArguments="Font" Desktop="20" Tablet="15" Phone="15" x:Key="ButtonFontSize" />
+
+            <!--Кнопки-->
+            <!--Большие синие кнопки-->
+            <Style TargetType="Button" x:Key="ActionButtonStyle">
+                <Setter Property="BackgroundColor" Value="{StaticResource clrBlue}"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="WidthRequest" Value="200"/>
+                <Setter Property="HeightRequest" Value="45"/>
+                <Setter Property="BorderRadius" Value="10"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="Font" Value="{StaticResource ButtonFontSize}"/>
+                <Style.Triggers>
+                    <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                        <Setter Property="BackgroundColor" Value="#BBBBBB" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!--Кнопки обычные-->
+            <Style TargetType="Button" x:Key="NormalButtonStyle">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="#009688"/>
+                <!--<Setter Property="WidthRequest" Value="150"/>
+                <Setter Property="HeightRequest" Value="36"/>-->
+                <Setter Property="BorderRadius" Value="3"/>
+                <!--<Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center"/>-->
+                <Setter Property="Font" Value="{StaticResource ButtonFontSize}"/>
+                <Setter Property="Margin" Value="3"/>
+                <Style.Triggers>
+                    <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                        <Setter Property="BackgroundColor" Value="#BBBBBB" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!--Кнопки контекстного меню (Три точки)-->
+            <Style TargetType="Button" x:Key="ContextButtonStyle">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="TextColor" Value="#333"/>
+                <Setter Property="Text" Value="..."/>
+                <Setter Property="Rotation" Value="270"/>
+                <Setter Property="Font" Value="Bold,17"/>
+            </Style>
+
+            <!--Лэйблы-->
+            <Style TargetType="Label" x:Key="BaseText">
+                <Setter Property="FontAttributes" Value="None"/>
+                <Setter Property="TextColor" Value="#333333"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="LineBreakMode" Value="NoWrap"/>
+            </Style>
+            <Style TargetType="Label" x:Key="NormalText" BasedOn="{StaticResource BaseText}">
+                <Setter Property="Font" Value="{StaticResource NormalFontSize}"/>
+            </Style>
+            <Style TargetType="Label" x:Key="LightText" BasedOn="{StaticResource BaseText}">
+                <Setter Property="Font" Value="{StaticResource NormalFontSize}"/>
+                <Setter Property="TextColor" Value="#999"/>
+            </Style>
+            <Style TargetType="Label" x:Key="AccentText"  BasedOn="{StaticResource BaseText}">
+                <Setter Property="Font" Value="{StaticResource AccentFontSize}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+            <Style TargetType="Label" x:Key="ErrorText" BasedOn="{StaticResource BaseText}">
+                <Setter Property="Font" Value="{StaticResource ErrorFontSize}"/>
+                <Setter Property="TextColor" Value="Red"/>
+            </Style>
+            <Style TargetType="Label" x:Key="SmallText" BasedOn="{StaticResource BaseText}">
+                <Setter Property="Font" Value="{StaticResource SmallFontSize}"/>
+                <Setter Property="TextColor" Value="#666666"/>
+            </Style>
+            <Style TargetType="Label" x:Key="HeaderText" BasedOn="{StaticResource AccentText}" >
+                <Setter Property="TextColor" Value="#009688"/>
+                <Setter Property="Margin" Value="0,10,0,5"/>
+            </Style>
+            <!--Default Label-->
+            <Style TargetType="Label" BasedOn="{StaticResource NormalText}"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

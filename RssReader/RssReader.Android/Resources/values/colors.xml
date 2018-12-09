@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="launcher_background">#FFFFFF</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+  <color name="primaryColor">#4CAF50</color>
+  <color name="primaryDarkColor">#388E3C</color>
+  <color name="accentColor">#00838F</color>
+
+  <color name="ListViewSelected">#FBC02D</color>
+  <color name="ListViewHighlighted">#E39696</color>
+
+  <!--Splash and permissions-->
+  <color name="primarySplashDarkColor">#FFFFFF</color>
+  <color name="launcher_background">#FFFFFF</color>
 </resources>

@@ -49,6 +49,11 @@ namespace RssReader.ViewModels
                 fileWorker.SaveRssListAsync(RssList, async error => await DisplayAlert("Error", error, "", "Ok"));
             });
 
+            MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "EditRss", (obj, rss) =>
+            {
+                fileWorker.SaveRssListAsync(RssList, async error => await DisplayAlert("Error", error, "", "Ok"));
+            });
+
             MessagingCenter.Subscribe<RssVM,object>(this, "RssFeedUpdated", (obj, arg) =>
             {
                 fileWorker.SaveRssListAsync(RssList, async error => await DisplayAlert("Error", error, "", "Ok"));

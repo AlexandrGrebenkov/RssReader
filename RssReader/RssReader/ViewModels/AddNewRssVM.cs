@@ -104,7 +104,10 @@ namespace RssReader.ViewModels
         {
             Original.Name = Name.Trim();
             Original.Link = Link.Trim();
-            MessagingCenter.Send(this, "AddRss", Original);
+            if (IsNew)
+                MessagingCenter.Send(this, "AddRss", Original);
+            else
+                MessagingCenter.Send(this, "EditRss", new object());
             navigation.PopAsync();
         }
     }

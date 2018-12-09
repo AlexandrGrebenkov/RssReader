@@ -1,17 +1,14 @@
 ﻿using Helpers;
 using RssReader.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 using Xamarin.Forms;
 
 namespace RssReader.ViewModels
 {
+    /// <summary>Добавление/Редактирование Rss-каналов</summary>
     class AddNewRssVM : BaseViewModel
     {
-        Rss Current;
-        Rss Original;
+        Rss Original; // Оригинальный объект (для проверки изменений)
 
         string _Name;
         /// <summary>Имя</summary>
@@ -72,15 +69,13 @@ namespace RssReader.ViewModels
             Title = "Создание";
             IsNew = true;
             Original = new Rss("", "");
-            Current = (Rss)Original.Clone();
 
-            cmdSave = new RelayCommand(() =>
-            {
-                Original = (Rss)Current.Clone();
-                MessagingCenter.Send(this, "AddRss", Original);
-                navigation.PopAsync();
-            }, () => string.IsNullOrWhiteSpace(NameError) &&
-                    string.IsNullOrWhiteSpace(LinkError));
+            Name = Original.Name;
+            Link = Original.Link;
+
+            cmdSave = new RelayCommand(Save, () =>
+                            string.IsNullOrWhiteSpace(NameError) &&
+                            string.IsNullOrWhiteSpace(LinkError));
         }
 
         public AddNewRssVM(INavigation navigation, Rss rss)
@@ -90,17 +85,24 @@ namespace RssReader.ViewModels
             IsNew = false;
 
             Original = rss;
-            Current = (Rss)Original.Clone();
 
-            cmdSave = new RelayCommand(() =>
-            {
-                Original = (Rss)Current.Clone();
-                MessagingCenter.Send(this, "AddRss", Original);
-                navigation.PopAsync();
-            }, () => string.IsNullOrWhiteSpace(NameError) &&
-                    string.IsNullOrWhiteSpace(LinkError));
+            Name = Original.Name;
+            Link = Original.Link;
+
+            cmdSave = new RelayCommand(Save, () =>
+                            string.IsNullOrWhiteSpace(NameError) &&
+                            string.IsNullOrWhiteSpace(LinkError));
         }
 
+        /// <summary>Команда сохранения изменений</summary>
         public RelayCommand cmdSave { get; }
+
+        void Save()
+        {
+            Original.Name = Name.Trim();
+            Original.Link = Link.Trim();
+            MessagingCenter.Send(this, "AddRss", Original);
+            navigation.PopAsync();
+        }
     }
 }

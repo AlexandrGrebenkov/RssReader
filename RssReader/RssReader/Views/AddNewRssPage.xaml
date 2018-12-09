@@ -8,7 +8,7 @@
         <ToolbarItem Text="Сохранить" Command="{Binding cmdSave}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Margin="8,0">
             <Label Text="Название:"/>
             <Entry Text="{Binding Name}" Placeholder="Введите имя"/>
             <Label Text="{Binding NameError}" Style="{StaticResource ErrorText}"/>

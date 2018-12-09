@@ -3,7 +3,6 @@ using RssReader.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -11,8 +10,10 @@ using Xamarin.Forms;
 
 namespace RssReader.ViewModels
 {
+    /// <summary>Вью-модель для просмотра Rss-ленты</summary>
     class RssVM : BaseViewModel
     {
+        /// <summary></summary>
         HttpClient client;
 
         Rss _Rss;
@@ -28,10 +29,10 @@ namespace RssReader.ViewModels
             Rss = rss;
             Title = Rss.Name;
 
+            // Обновляем ленту при открытии
             Device.BeginInvokeOnMainThread(async () =>
             {
-                var messages = await GetRssFeed(rss.Link,
-                    async error => await DisplayAlert("Ошибка", error, "", "Ok"));
+                var messages = await GetRssFeed(rss.Link);
                 if (messages != null)
                     Rss.Messages = messages;
             });
@@ -53,15 +54,20 @@ namespace RssReader.ViewModels
             });
         }
 
+        /// <summary>Выбор сообщения из ленты (открывает браузер)</summary>
         public ICommand cmdSelect { get; }
+        /// <summary>Команда обновления ленты</summary>
         public RelayCommand cmdRefresh { get; }
 
-        private async Task<IEnumerable<RssMessage>> GetRssFeed(string rssLink, Action<string> errorhandler = null)
-        {
+        /// <summary>Метод получения ленты из сети</summary>
+        /// <param name="rssLink">Ссылка на Rss-канал</param>
+        /// <param name="errorhandler">Обработчик ошибок</param>
+        async Task<IEnumerable<RssMessage>> GetRssFeed(string rssLink, Action<string> errorhandler = null)
+        {// TODO: Разбить на 2 метода
             string feed = string.Empty;
             List<RssMessage> messages = null;
             try
-            {
+            {// Запрос XML ленты
                 if (client == null)
                     client = new HttpClient();
                 feed = await client.GetStringAsync(rssLink);
@@ -77,7 +83,7 @@ namespace RssReader.ViewModels
             }
 
             try
-            {
+            {// Разбор полученной XML ленты
                 if (string.IsNullOrEmpty(feed)) return null;
 
                 var parsedFeed = XElement.Parse(feed);
@@ -91,7 +97,7 @@ namespace RssReader.ViewModels
                     messages.Add(new RssMessage(title.Value, "", DateTime.Now, link.Value));
                 }
 
-                MessagingCenter.Send(this, "RssFeedUpdated", new object());
+                MessagingCenter.Send(this, "RssFeedUpdated", new object()); // Отправляем сообщение о том, что лента обновилась
             }
             catch (Exception ex)
             {

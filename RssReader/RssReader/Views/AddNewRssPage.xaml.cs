@@ -2,48 +2,73 @@
 using Helpers;
 using RssReader.Models;
 using RssReader.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace RssReader.Views
 {
+    /// <summary>
+    /// Страница создания/редактирования RSS-Канала
+    /// </summary>
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddNewRssPage : BaseContentPage
     {
+        /// <summary>Создание нового Rss-канала</summary>
         public AddNewRssPage()
         {
             InitializeComponent();
             BindingContext = new AddNewRssVM(Navigation);
         }
 
+        /// <summary>Редактирование</summary>
+        /// <param name="rss">Канал, который нужно отредактировать</param>
         public AddNewRssPage(Rss rss)
         {
             InitializeComponent();
             BindingContext = new AddNewRssVM(Navigation, rss);
         }
 
+        /// <summary>
+        /// Навигация назад через аппаратную кнопку
+        /// </summary>
+        /// <returns></returns>
         protected override bool OnBackButtonPressed()
         {
             var VM = (AddNewRssVM)BindingContext;
-            return !VM.cmdSave.CanExecute(null);
+            return VM.IsChanged; 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async override Task<bool> CanClose()
         {
             var VM = (AddNewRssVM)BindingContext;
             if (VM.IsChanged)
             {
-                string answer = null;
                 if (VM.cmdSave.CanExecute(null))
-                    answer = await DisplayActionSheet("Сохранить изменения?",
+                {
+                    var answer = await DisplayActionSheet("Сохранить изменения?",
                                 "Отмена", "",
                                 "Сохранить и выйти", "Выйти без сохранения");
+                    switch (answer)
+                    {
+                        case "Сохранить и выйти":
+                        {
+                            VM.Save();
+                            return true;
+                        }
+                        case "Выйти без сохранения":
+                        {
+                            return true;
+                        }
+                        default:
+                        {
+                            return false;
+                        }
+                    }
+                }
                 else
                 {
                     if (await DisplayAlert("Внимание!",
@@ -53,20 +78,14 @@ namespace RssReader.Views
                     else
                         return false;
                 }
-
-                if (answer == "Сохранить и выйти")
-                {
-                    VM.Save();
-                    return true;
-                }
-                if (answer == "Выйти без сохранения")
-                    return true;
-                return false;
             }
             else
                 return true;
         }
 
+        /// <summary>
+        /// Навигация назад в Android через стрелочку в ToolBar
+        /// </summary>
         public override async Task<bool> OnNavigationBackButtonPressed()
         {
             return await CanClose();

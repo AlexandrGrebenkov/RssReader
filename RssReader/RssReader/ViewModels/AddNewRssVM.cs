@@ -10,6 +10,9 @@ namespace RssReader.ViewModels
     {
         Rss Original; // Оригинальный объект (для проверки изменений)
 
+        public bool IsChanged => string.Compare(Name.Trim(), Original.Name) != 0 ||
+                                 string.Compare(Link.Trim(), Original.Link) != 0;
+
         string _Name;
         /// <summary>Имя</summary>
         public string Name
@@ -97,7 +100,7 @@ namespace RssReader.ViewModels
         /// <summary>Команда сохранения изменений</summary>
         public RelayCommand cmdSave { get; }
 
-        void Save()
+        public void Save()
         {
             Original.Name = Name.Trim();
             Original.Link = Link.Trim();

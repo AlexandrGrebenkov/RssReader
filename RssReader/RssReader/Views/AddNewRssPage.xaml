@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<base:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RssReader.Views.AddNewRssPage"
+             xmlns:base="clr-namespace:Controls.BasePages"
              BackgroundColor="{StaticResource clrBackground}"
              Title="{Binding Title}">
-    <ContentPage.ToolbarItems>
+    <base:BaseContentPage.ToolbarItems>
         <ToolbarItem Text="Сохранить" Command="{Binding cmdSave}"/>
-    </ContentPage.ToolbarItems>
-    <ContentPage.Content>
+    </base:BaseContentPage.ToolbarItems>
+    <base:BaseContentPage.Content>
         <StackLayout Margin="8,0">
             <Label Text="Название:"/>
             <Entry Text="{Binding Name}" Placeholder="Введите имя"/>
@@ -18,5 +19,5 @@
             <Label Text="{Binding LinkError}" Style="{StaticResource ErrorText}"/>
 
         </StackLayout>
-    </ContentPage.Content>
-</ContentPage>
+    </base:BaseContentPage.Content>
+</base:BaseContentPage>

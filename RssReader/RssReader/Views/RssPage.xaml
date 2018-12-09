@@ -13,10 +13,12 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Rss.Messages}" RowHeight="60"
+        <ListView ItemsSource="{Binding Rss.Messages}" 
                   IsPullToRefreshEnabled="True"
                   RefreshCommand="{Binding cmdRefresh}"
-                  IsRefreshing="{Binding IsBusy}">
+                  IsRefreshing="{Binding IsBusy}"
+                  HasUnevenRows="True"
+                  RowHeight="-1">
             <ListView.Behaviors>
                 <h:EventToCommandBehavior EventName="ItemTapped" Command="{Binding cmdSelect}" 
                                           EventArgsConverter="{StaticResource ItemTappedConverter}" />
@@ -25,9 +27,12 @@
                 <DataTemplate>
                     <ViewCell>
                         <Grid>
-                            <StackLayout Margin="8,0,0,0" VerticalOptions="Center" Spacing="2">
-                                <Label Text="{Binding Title}"/>
-                                <Label Text="{Binding Link}" Style="{StaticResource LightText}"/>
+                            <StackLayout Margin="8,0" VerticalOptions="Center">
+                                <Label Text="{Binding Title}" LineBreakMode="WordWrap" 
+                                       Style="{StaticResource AccentText}"/>
+                                <Label Text="{Binding Text}"  LineBreakMode="WordWrap"/>
+                                <Label Text="{Binding Date}"  HorizontalOptions="End" 
+                                       Style="{StaticResource LightText}" Margin="0,0,0,12"/>
                             </StackLayout>
                         </Grid>
                     </ViewCell>

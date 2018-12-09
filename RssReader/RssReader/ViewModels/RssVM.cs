@@ -93,8 +93,14 @@ namespace RssReader.ViewModels
                 {
                     var title = item.Element("title");
                     var link = item.Element("link");
+                    var text = item.Element("description");
+                    var date = item.Element("pubDate");
 
-                    messages.Add(new RssMessage(title.Value, "", DateTime.Now, link.Value));
+                    DateTime dt = DateTime.MinValue;
+                    if (date != null && !DateTime.TryParse(date.Value, out dt))
+                        dt = DateTime.MinValue;
+
+                    messages.Add(new RssMessage(title.Value, text.Value, dt, link.Value));
                 }
 
                 MessagingCenter.Send(this, "RssFeedUpdated", new object()); // Отправляем сообщение о том, что лента обновилась

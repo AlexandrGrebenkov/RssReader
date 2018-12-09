@@ -29,9 +29,9 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="50"/>
                             </Grid.ColumnDefinitions>
-                            <StackLayout Margin="8,0,0,0" VerticalOptions="Center" Spacing="2">
-                                <Label Text="{Binding Name}"/>
-                                <Label Text="{Binding Link}" Style="{StaticResource LightText}"/>
+                            <StackLayout Margin="8,0" VerticalOptions="Center" Spacing="2">
+                                <Label Text="{Binding Name}" LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Link}" Style="{StaticResource LightText}" LineBreakMode="TailTruncation"/>
                             </StackLayout>
                             <Button Grid.Column="1" Style="{StaticResource ContextButtonStyle}" Grid.RowSpan="2"
                                     Command="{Binding Source={x:Reference pRssList}, Path=BindingContext.cmdContextAction}" 

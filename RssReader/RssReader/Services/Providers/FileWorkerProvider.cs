@@ -1,8 +1,13 @@
-﻿using System;
+﻿using RssReader.Services.Mock;
+using System;
 using Xamarin.Forms;
 
 namespace RssReader.Services.Providers
 {
+    /// <summary>
+    /// Провайдер сервиса доступа к файлам
+    /// Использует ленивую инициализацию и через DependencyService получает реализацию для конкретной платформы
+    /// </summary>
     public static class FileWorkerProvider
     {
         static Lazy<IFileWorker> implementation = new Lazy<IFileWorker>(() => Create(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
@@ -17,7 +22,8 @@ namespace RssReader.Services.Providers
                 var ret = implementation.Value;
                 if (ret == null)
                 {
-                    throw NotImplementedInReferenceAssembly();
+                    ret = new FileWorker_Mock();
+                    //throw NotImplementedInReferenceAssembly();
                 }
                 return ret;
             }

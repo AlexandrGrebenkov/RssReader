@@ -16,7 +16,7 @@
         <ToolbarItem Text="Добавить" Command="{Binding cmdAdd}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding RssList}" RowHeight="60">
+        <ListView ItemsSource="{Binding RssList}" RowHeight="60" SelectionMode="None">
             <ListView.Behaviors>
                 <h:EventToCommandBehavior EventName="ItemTapped" Command="{Binding cmdSelect}" 
                                           EventArgsConverter="{StaticResource ItemTappedConverter}" />

@@ -13,7 +13,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Rss.Messages}" 
+        <ListView ItemsSource="{Binding Messages}" 
                   IsPullToRefreshEnabled="True"
                   RefreshCommand="{Binding cmdRefresh}"
                   IsRefreshing="{Binding IsBusy}"

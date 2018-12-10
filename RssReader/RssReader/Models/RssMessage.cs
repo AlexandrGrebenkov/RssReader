@@ -1,5 +1,4 @@
-﻿using Helpers;
-using System;
+﻿using System;
 
 namespace RssReader.Models
 {
@@ -25,7 +24,5 @@ namespace RssReader.Models
             Date = date;
             Link = link;
         }
-
-        private RssMessage() { }
     }
 }

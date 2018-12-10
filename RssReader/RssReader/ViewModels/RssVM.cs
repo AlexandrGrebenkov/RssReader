@@ -16,12 +16,19 @@ namespace RssReader.ViewModels
         /// <summary></summary>
         HttpClient client;
 
-        Rss _Rss;
         /// <summary>Rss-канал</summary>
-        public Rss Rss
+        Rss Rss { get; }
+
+        /// <summary>Сообщения в ленте</summary>
+        public IEnumerable<RssMessage> Messages
         {
-            get { return _Rss; }
-            set { SetProperty(ref _Rss, value); }
+            get => Rss.Messages;
+            set
+            {
+                Rss.Messages = value;
+                OnPropertyChanged(nameof(Messages));
+                MessagingCenter.Send(this, "RssFeedUpdated", new object()); // Отправляем сообщение о том, что лента обновилась
+            }
         }
 
         public RssVM(Rss rss)
@@ -34,7 +41,7 @@ namespace RssReader.ViewModels
             {
                 var messages = await GetRssFeed(rss.Link);
                 if (messages != null)
-                    Rss.Messages = messages;
+                    Messages = messages;
             });
 
             cmdSelect = new Command<RssMessage>(message =>
@@ -49,7 +56,7 @@ namespace RssReader.ViewModels
                 var messages = await GetRssFeed(rss.Link,
                     async error => await DisplayAlert("Ошибка", error, "", "Ok"));
                 if (messages != null)
-                    Rss.Messages = messages;
+                    Messages = messages;
                 IsBusy = false;
             });
         }
@@ -101,9 +108,7 @@ namespace RssReader.ViewModels
                         dt = DateTime.MinValue;
 
                     messages.Add(new RssMessage(title.Value, text.Value, dt, link.Value));
-                }
-
-                MessagingCenter.Send(this, "RssFeedUpdated", new object()); // Отправляем сообщение о том, что лента обновилась
+                }                
             }
             catch (Exception ex)
             {

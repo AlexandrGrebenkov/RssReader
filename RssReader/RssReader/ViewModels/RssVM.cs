@@ -72,7 +72,7 @@ namespace RssReader.ViewModels
         /// <param name="errorhandler">Обработчик ошибок</param>
         async Task<IEnumerable<RssMessage>> GetRssFeed(string rssLink, Action<string> errorhandler = null)
         {// TODO: Разбить на 2 метода
-            string feed = string.Empty;
+            var feed = string.Empty;
             List<RssMessage> messages = null;
             try
             {// Запрос XML ленты
@@ -97,18 +97,17 @@ namespace RssReader.ViewModels
                 var parsedFeed = XElement.Parse(feed);
                 messages = new List<RssMessage>();
 
-                foreach (var item in parsedFeed.Element("channel").Elements("item"))
+                foreach (var item in parsedFeed?.Element("channel")?.Elements("item"))
                 {
                     var title = item.Element("title");
                     var link = item.Element("link");
                     var text = item.Element("description");
                     var date = item.Element("pubDate");
 
-                    DateTime dt = DateTime.MinValue;
-                    if (date != null && !DateTime.TryParse(date.Value, out dt))
+                    if (date != null && !DateTime.TryParse(date.Value, out var dt))
                         dt = DateTime.MinValue;
 
-                    messages.Add(new RssMessage(title.Value, text.Value, dt, link.Value));
+                    messages.Add(new RssMessage(title?.Value, text?.Value, dt, link?.Value));
                 }
             }
             catch (Exception ex)

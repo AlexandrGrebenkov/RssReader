@@ -1,9 +1,9 @@
-﻿using RssReader.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RssReader.Models;
 
-namespace RssReader.Services
+namespace RssReader.Services.Abstract
 {
     /// <summary>Сервис работы с файловой системой</summary>
     public interface IFileWorker

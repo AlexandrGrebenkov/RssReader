@@ -5,6 +5,7 @@ using RssReader.Services;
 using RssReader.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using RssReader.Services.Abstract;
 using Xamarin.Forms;
 
 namespace RssReader.ViewModels

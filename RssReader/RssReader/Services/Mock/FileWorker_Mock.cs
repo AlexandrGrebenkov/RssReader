@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RssReader.Models;
+using RssReader.Services.Abstract;
 
 namespace RssReader.Services.Mock
 {

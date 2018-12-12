@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using System.Text;
+using RssReader.Services.Abstract;
 
 [assembly: Xamarin.Forms.Dependency(typeof(RssReader.Droid.Services.FileWorker_Droid))]
 namespace RssReader.Droid.Services

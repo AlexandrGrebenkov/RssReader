@@ -1,5 +1,6 @@
 ﻿using RssReader.Services.Mock;
 using System;
+using RssReader.Services.Abstract;
 using Xamarin.Forms;
 
 namespace RssReader.Services.Providers
@@ -10,7 +11,7 @@ namespace RssReader.Services.Providers
     /// </summary>
     public static class FileWorkerProvider
     {
-        static Lazy<IFileWorker> implementation = new Lazy<IFileWorker>(() => Create(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
+        static Lazy<IFileWorker> implementation = new Lazy<IFileWorker>(Create, System.Threading.LazyThreadSafetyMode.PublicationOnly);
 
         /// <summary>
         /// Доступ к текущей имплементации переферии
@@ -19,12 +20,7 @@ namespace RssReader.Services.Providers
         {
             get
             {
-                var ret = implementation.Value;
-                if (ret == null)
-                {
-                    ret = new FileWorker_Mock();
-                    //throw NotImplementedInReferenceAssembly();
-                }
+                var ret = implementation.Value ?? new FileWorker_Mock();
                 return ret;
             }
         }

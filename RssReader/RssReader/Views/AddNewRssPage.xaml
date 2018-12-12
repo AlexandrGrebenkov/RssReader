@@ -1,21 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <base:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RssReader.Views.AddNewRssPage"
-             xmlns:base="clr-namespace:Controls.BasePages"
-             BackgroundColor="{StaticResource clrBackground}"
-             Title="{Binding Title}">
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="RssReader.Views.AddNewRssPage"
+                      xmlns:base="clr-namespace:Controls.BasePages"
+                      xmlns:i18n="clr-namespace:RssReader.Helpers"
+                      BackgroundColor="{StaticResource clrBackground}"
+                      Title="{Binding Title}">
     <base:BaseContentPage.ToolbarItems>
-        <ToolbarItem Text="Сохранить" Command="{Binding cmdSave}"/>
+        <ToolbarItem Text="{i18n:Translate Save}" Command="{Binding cmdSave}"/>
     </base:BaseContentPage.ToolbarItems>
     <base:BaseContentPage.Content>
         <StackLayout Margin="8,0">
-            <Label Text="Название:"/>
-            <Entry Text="{Binding Name}" Placeholder="Введите имя"/>
+            <Label Text="{i18n:Translate Name}"/>
+            <Entry Text="{Binding Name}" Placeholder="{i18n:Translate EnterName}"/>
             <Label Text="{Binding NameError}" Style="{StaticResource ErrorText}"/>
 
-            <Label Text="Путь:"/>
-            <Entry Text="{Binding Link}" Placeholder="Введите ссылку"/>
+            <Label Text="{i18n:Translate Link}"/>
+            <Entry Text="{Binding Link}" Placeholder="{i18n:Translate EnterLink}"/>
             <Label Text="{Binding LinkError}" Style="{StaticResource ErrorText}"/>
 
         </StackLayout>

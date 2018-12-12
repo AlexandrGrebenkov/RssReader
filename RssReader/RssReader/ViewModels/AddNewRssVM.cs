@@ -1,5 +1,6 @@
 ﻿using Helpers;
 using RssReader.Models;
+using RssReader.Resources.Lang;
 using System.Text.RegularExpressions;
 using Xamarin.Forms;
 
@@ -23,7 +24,7 @@ namespace RssReader.ViewModels
                 SetProperty(ref _Name, value);
                 NameError = string.Empty;
                 if (string.IsNullOrWhiteSpace(Name))
-                    NameError = "Имя не может быть пустым";
+                    NameError = Strings.NameCantBeEmpty;
                 cmdSave?.RaiseCanExecuteChanged();
             }
         }
@@ -46,9 +47,9 @@ namespace RssReader.ViewModels
                 SetProperty(ref _Link, value);
                 LinkError = string.Empty;
                 if (string.IsNullOrWhiteSpace(Link))
-                    LinkError = "Ссылка не может быть пустой";
-                if (!linkRegex.IsMatch(Link))
-                    LinkError = "Ошибка формата ссылки";
+                    LinkError = Strings.LinkCantBeEmpty;
+                else if (!linkRegex.IsMatch(Link))
+                    LinkError = Strings.LinkFormatError;
                 cmdSave?.RaiseCanExecuteChanged();
             }
         }
@@ -69,7 +70,7 @@ namespace RssReader.ViewModels
         public AddNewRssVM(INavigation navigation)
         {
             this.navigation = navigation;
-            Title = "Создание";
+            Title = Titles.NewRss;
             IsNew = true;
             Original = new Rss("", "");
 
@@ -84,7 +85,7 @@ namespace RssReader.ViewModels
         public AddNewRssVM(INavigation navigation, Rss rss)
         {
             this.navigation = navigation;
-            Title = "Редактирование";
+            Title = Titles.EditRss;
             IsNew = false;
 
             Original = rss;

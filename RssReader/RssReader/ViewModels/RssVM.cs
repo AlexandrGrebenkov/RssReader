@@ -1,5 +1,6 @@
 ﻿using Helpers;
 using RssReader.Models;
+using RssReader.Resources.Lang;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -54,7 +55,7 @@ namespace RssReader.ViewModels
             {
                 IsBusy = true;
                 var messages = await GetRssFeed(rss.Link,
-                    async error => await DisplayAlert("Ошибка", error, "", "Ok"));
+                    async error => await DisplayAlert(Common.Error, error, "", Common.Ok));
                 if (messages != null)
                     Messages = messages;
                 IsBusy = false;
@@ -84,7 +85,7 @@ namespace RssReader.ViewModels
 #if DEBUG
                 errorhandler?.Invoke(ex.Message);
 #else
-                errorhandler?.Invoke("Что-то не так со связью :(");
+                errorhandler?.Invoke(Strings.NetworkProblems);
 #endif
                 return null;
             }
@@ -108,14 +109,14 @@ namespace RssReader.ViewModels
                         dt = DateTime.MinValue;
 
                     messages.Add(new RssMessage(title.Value, text.Value, dt, link.Value));
-                }                
+                }
             }
             catch (Exception ex)
             {
 #if DEBUG
                 errorhandler?.Invoke(ex.Message);
 #else
-                errorhandler?.Invoke("Не могу разобрать что сервер прислал :(");
+                errorhandler?.Invoke(Strings.ParsingXmlProblems);
 #endif
                 return null;
             }

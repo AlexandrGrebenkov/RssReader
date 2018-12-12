@@ -1,6 +1,7 @@
 ﻿using Controls.BasePages;
 using Helpers;
 using RssReader.Models;
+using RssReader.Resources.Lang;
 using RssReader.ViewModels;
 using System.Threading.Tasks;
 using Xamarin.Forms.Xaml;
@@ -35,7 +36,7 @@ namespace RssReader.Views
         protected override bool OnBackButtonPressed()
         {
             var VM = (AddNewRssVM)BindingContext;
-            return VM.IsChanged; 
+            return VM.IsChanged;
         }
 
         /// <summary>
@@ -49,38 +50,30 @@ namespace RssReader.Views
             {
                 if (VM.cmdSave.CanExecute(null))
                 {
-                    var answer = await DisplayActionSheet("Сохранить изменения?",
-                                "Отмена", "",
-                                "Сохранить и выйти", "Выйти без сохранения");
-                    switch (answer)
+                    var answer = await DisplayActionSheet(Strings.SaveChanges,
+                                Common.Cancel, "",
+                                Strings.SaveAndExit, Strings.ExitWithoutSaving);
+                    if (answer == Strings.SaveAndExit)
                     {
-                        case "Сохранить и выйти":
-                        {
-                            VM.Save();
-                            return true;
-                        }
-                        case "Выйти без сохранения":
-                        {
-                            return true;
-                        }
-                        default:
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    if (await DisplayAlert("Внимание!",
-                                    "Ошибка ввода данных",
-                                    "Выйти без сохранения", "Вернуться назад"))
+                        VM.Save();
                         return true;
-                    else
-                        return false;
+                    }
+                    else if (answer == Strings.ExitWithoutSaving)
+                    {
+                        return true;
+                    }
                 }
             }
             else
-                return true;
+            {
+                if (await DisplayAlert(Common.Attention,
+                                Strings.InputDataError,
+                                Strings.ExitWithoutSaving, Strings.ComeBack))
+                    return true;
+                else
+                    return false;
+            }
+            return false;
         }
 
         /// <summary>

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RssReader.Views.RssPage"
              xmlns:conv="clr-namespace:Helpers.Converters"
+             xmlns:i18n="clr-namespace:RssReader.Helpers"
              xmlns:h="clr-namespace:Helpers"
              BackgroundColor="{StaticResource clrBackground}"
              Title="{Binding Title}"

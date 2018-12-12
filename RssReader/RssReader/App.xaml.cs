@@ -1,4 +1,5 @@
-﻿using RssReader.Views;
+﻿using Plugin.Multilingual;
+using RssReader.Views;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,6 +11,9 @@ namespace RssReader
     {
         public App()
         {
+            RssReader.Resources.Lang.Common.Culture = CrossMultilingual.Current.DeviceCultureInfo; 
+            RssReader.Resources.Lang.Titles.Culture = CrossMultilingual.Current.DeviceCultureInfo; 
+
             InitializeComponent();
 
             MainPage = new NavigationPage(new RssListPage());

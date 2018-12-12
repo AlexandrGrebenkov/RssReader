@@ -4,6 +4,7 @@
              x:Class="RssReader.Views.RssListPage"
              xmlns:conv="clr-namespace:Helpers.Converters"
              xmlns:h="clr-namespace:Helpers"
+             xmlns:i18n="clr-namespace:RssReader.Helpers"
              BackgroundColor="{StaticResource clrBackground}"
              Title="{Binding Title}"
              x:Name="pRssList">
@@ -13,7 +14,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Добавить" Command="{Binding cmdAdd}"/>
+        <ToolbarItem Text="{i18n:Translate Add}" Command="{Binding cmdAdd}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ListView ItemsSource="{Binding RssList}" RowHeight="60" SelectionMode="None">

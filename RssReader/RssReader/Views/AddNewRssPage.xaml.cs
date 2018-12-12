@@ -46,22 +46,19 @@ namespace RssReader.Views
         public async override Task<bool> CanClose()
         {
             var VM = (AddNewRssVM)BindingContext;
-            if (VM.IsChanged)
+            if (VM.IsChanged && VM.cmdSave.CanExecute(null))
             {
-                if (VM.cmdSave.CanExecute(null))
+                var answer = await DisplayActionSheet(Strings.SaveChanges,
+                            Common.Cancel, "",
+                            Strings.SaveAndExit, Strings.ExitWithoutSaving);
+                if (answer == Strings.SaveAndExit)
                 {
-                    var answer = await DisplayActionSheet(Strings.SaveChanges,
-                                Common.Cancel, "",
-                                Strings.SaveAndExit, Strings.ExitWithoutSaving);
-                    if (answer == Strings.SaveAndExit)
-                    {
-                        VM.Save();
-                        return true;
-                    }
-                    else if (answer == Strings.ExitWithoutSaving)
-                    {
-                        return true;
-                    }
+                    VM.Save();
+                    return true;
+                }
+                else if (answer == Strings.ExitWithoutSaving)
+                {
+                    return true;
                 }
             }
             else

@@ -106,6 +106,8 @@ namespace RssReader.ViewModels
 
                     if (date != null && !DateTime.TryParse(date.Value, out var dt))
                         dt = DateTime.MinValue;
+                    else
+                        dt = DateTime.MinValue;
 
                     messages.Add(new RssMessage(title?.Value, text?.Value, dt, link?.Value));
                 }

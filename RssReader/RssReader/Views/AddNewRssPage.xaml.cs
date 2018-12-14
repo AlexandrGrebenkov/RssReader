@@ -46,8 +46,8 @@ namespace RssReader.Views
         public async override Task<bool> CanClose()
         {
             var VM = (AddNewRssVM)BindingContext;
-            if (VM.IsChanged && VM.cmdSave.CanExecute(null))
-            {
+            if (VM.IsChanged && VM.CanSave)
+            {// Данные изменились и можем сохранить
                 var answer = await DisplayActionSheet(Strings.SaveChanges,
                             Common.Cancel, "",
                             Strings.SaveAndExit, Strings.ExitWithoutSaving);
@@ -60,9 +60,10 @@ namespace RssReader.Views
                 {
                     return true;
                 }
+                else return false;
             }
-            else
-            {
+            else if (VM.IsChanged)
+            {// ошибка ввода данных (нельзя сохранять)
                 if (await DisplayAlert(Common.Attention,
                                 Strings.InputDataError,
                                 Strings.ExitWithoutSaving, Strings.ComeBack))
@@ -70,7 +71,8 @@ namespace RssReader.Views
                 else
                     return false;
             }
-            return false;
+            else
+                return true;// Выход без изменений
         }
 
         /// <summary>

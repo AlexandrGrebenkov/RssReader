@@ -14,6 +14,29 @@ namespace RssReader.ViewModels
         public bool IsChanged => string.Compare(Name.Trim(), Original.Name) != 0 ||
                                  string.Compare(Link.Trim(), Original.Link) != 0;
 
+        public bool CanSave
+        {
+            get
+            {
+                NameError = string.Empty;
+                if (string.IsNullOrWhiteSpace(Name))
+                    NameError = Strings.NameCantBeEmpty;
+
+                LinkError = string.Empty;
+                if (string.IsNullOrWhiteSpace(Link))
+                    LinkError = Strings.LinkCantBeEmpty;
+                else if (!linkRegex.IsMatch(Link))
+                    LinkError = Strings.LinkFormatError;
+
+                if (string.IsNullOrWhiteSpace(NameError) &&
+                    string.IsNullOrWhiteSpace(LinkError))
+                    return true;
+                else
+                    return false;
+            }
+
+        }
+
         string _Name;
         /// <summary>Имя</summary>
         public string Name
@@ -22,10 +45,7 @@ namespace RssReader.ViewModels
             set
             {
                 SetProperty(ref _Name, value);
-                NameError = string.Empty;
-                if (string.IsNullOrWhiteSpace(Name))
-                    NameError = Strings.NameCantBeEmpty;
-                cmdSave?.RaiseCanExecuteChanged();
+
             }
         }
 
@@ -45,12 +65,7 @@ namespace RssReader.ViewModels
             set
             {
                 SetProperty(ref _Link, value);
-                LinkError = string.Empty;
-                if (string.IsNullOrWhiteSpace(Link))
-                    LinkError = Strings.LinkCantBeEmpty;
-                else if (!linkRegex.IsMatch(Link))
-                    LinkError = Strings.LinkFormatError;
-                cmdSave?.RaiseCanExecuteChanged();
+
             }
         }
 
@@ -77,9 +92,7 @@ namespace RssReader.ViewModels
             Name = Original.Name;
             Link = Original.Link;
 
-            cmdSave = new RelayCommand(Save, () =>
-                            string.IsNullOrWhiteSpace(NameError) &&
-                            string.IsNullOrWhiteSpace(LinkError));
+            cmdSave = new RelayCommand(Save);
         }
 
         public AddNewRssVM(INavigation navigation, Rss rss)
@@ -93,16 +106,16 @@ namespace RssReader.ViewModels
             Name = Original.Name;
             Link = Original.Link;
 
-            cmdSave = new RelayCommand(Save, () =>
-                            string.IsNullOrWhiteSpace(NameError) &&
-                            string.IsNullOrWhiteSpace(LinkError));
+            cmdSave = new RelayCommand(Save);
         }
-
+        
         /// <summary>Команда сохранения изменений</summary>
         public RelayCommand cmdSave { get; }
 
         public void Save()
         {
+            if (!CanSave) return;
+
             Original.Name = Name.Trim();
             Original.Link = Link.Trim();
             if (IsNew)

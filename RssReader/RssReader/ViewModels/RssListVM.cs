@@ -34,6 +34,7 @@ namespace RssReader.ViewModels
             MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "EditRss", (obj, rss) =>
             {
                 rssData.UpdateRss(rss);
+                RssList = new ObservableCollection<Rss>(RssList);
             });
 
             MessagingCenter.Subscribe<RssVM, Rss>(this, "RssFeedUpdated", (obj, rss) =>

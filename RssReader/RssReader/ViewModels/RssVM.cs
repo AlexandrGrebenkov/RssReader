@@ -28,7 +28,7 @@ namespace RssReader.ViewModels
             {
                 Rss.Messages = value;
                 OnPropertyChanged(nameof(Messages));
-                MessagingCenter.Send(this, "RssFeedUpdated", new object()); // Отправляем сообщение о том, что лента обновилась
+                MessagingCenter.Send(this, "RssFeedUpdated", Rss); // Отправляем сообщение о том, что лента обновилась
             }
         }
 

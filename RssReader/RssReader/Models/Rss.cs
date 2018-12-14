@@ -4,6 +4,8 @@ namespace RssReader.Models
 {
     public class Rss
     {
+        public int Id { get; set; }
+
         /// <summary>Имя</summary>
         public string Name { get; set; }
 

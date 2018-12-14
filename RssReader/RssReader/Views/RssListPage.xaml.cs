@@ -1,4 +1,5 @@
 ﻿using Helpers;
+using RssReader.Services;
 using RssReader.Services.Providers;
 using RssReader.ViewModels;
 using System.Threading.Tasks;
@@ -8,13 +9,13 @@ using Xamarin.Forms.Xaml;
 namespace RssReader.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class RssListPage : ContentPage
-	{
-		public RssListPage ()
-		{
-			InitializeComponent ();
-            BindingContext = new RssListVM(Navigation, FileWorkerProvider.Current);
-		}
+    public partial class RssListPage : ContentPage
+    {
+        public RssListPage()
+        {
+            InitializeComponent();
+            BindingContext = new RssListVM(Navigation, new RssDataFromDb(PlatformInfoProvider.Current.DbFileName));
+        }
 
         #region Для отображения диалоговых окон из VM
 

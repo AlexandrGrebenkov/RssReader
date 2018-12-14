@@ -3,6 +3,7 @@ using RssReader.Models;
 using RssReader.Services.Abstract;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace RssReader.Services
 {
@@ -28,49 +29,93 @@ namespace RssReader.Services
             }
         }
 
-        public void CreateRss(Rss rss)
+        public void CreateRss(Rss rss, Action<string> errorHandler = null)
         {
-            using (var db = new ApplicationContext(fileName))
+            try
             {
-                if (rss.Id == 0)
+                using (var db = new ApplicationContext(fileName))
                 {
-                    db.Add(rss);
-                    db.SaveChanges();
+                    if (rss.Id == 0)
+                    {
+                        db.Add(rss);
+                        db.SaveChanges();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                errorHandler?.Invoke(ex.Message);
+#else
+                errorhandler?.Invoke(Strings.DbError);
+#endif
             }
         }
 
-        public void DeleteRss(Rss rss)
+        public void DeleteRss(Rss rss, Action<string> errorHandler = null)
         {
-            using (var db = new ApplicationContext(fileName))
+            try
             {
-                if (rss.Id != 0)
+                using (var db = new ApplicationContext(fileName))
                 {
-                    db.Remove(rss);
-                    db.SaveChanges();
+                    if (rss.Id != 0)
+                    {
+                        db.Remove(rss);
+                        db.SaveChanges();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                errorHandler?.Invoke(ex.Message);
+#else
+                errorhandler?.Invoke(Strings.DbError);
+#endif
             }
         }
 
-        public IEnumerable<Rss> GetRssList()
+        public IEnumerable<Rss> GetRssList(Action<string> errorHandler = null)
         {
-            IEnumerable<Rss> list;
-            using (var db = new ApplicationContext(fileName))
+            IEnumerable<Rss> list = null;
+            try
             {
-                list = db.RssList.Include(r => r.Messages).ToList();
+                using (var db = new ApplicationContext(fileName))
+                {
+                    list = db.RssList.Include(r => r.Messages).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                errorHandler?.Invoke(ex.Message);
+#else
+                errorhandler?.Invoke(Strings.DbError);
+#endif
             }
             return list;
         }
 
-        public void UpdateRss(Rss rss)
+        public void UpdateRss(Rss rss, Action<string> errorHandler = null)
         {
-            using (var db = new ApplicationContext(fileName))
+            try
             {
-                if (rss.Id != 0)
+                using (var db = new ApplicationContext(fileName))
                 {
-                    db.Update(rss);
-                    db.SaveChanges();
+                    if (rss.Id != 0)
+                    {
+                        db.Update(rss);
+                        db.SaveChanges();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                errorHandler?.Invoke(ex.Message);
+#else
+                errorhandler?.Invoke(Strings.DbError);
+#endif
             }
         }
     }

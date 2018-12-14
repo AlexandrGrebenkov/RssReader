@@ -79,6 +79,15 @@ namespace RssReader.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database error .
+        /// </summary>
+        internal static string DbError {
+            get {
+                return ResourceManager.GetString("DbError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit without saving.
         /// </summary>
         internal static string ExitWithoutSaving {

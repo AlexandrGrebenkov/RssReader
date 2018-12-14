@@ -22,24 +22,24 @@ namespace RssReader.ViewModels
         public RssListVM(INavigation navigation, IRssData rssData)
         {
             Title = Titles.RssList;
-            RssList = new ObservableCollection<Rss>(rssData.GetRssList());
+            RssList = new ObservableCollection<Rss>(rssData.GetRssList(async error => await DisplayAlert(Common.Error, error, "", Common.Ok)));
 
             MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "AddRss", (obj, rss) =>
             {
                 if (RssList == null) return;
                 RssList.Add(rss);
-                rssData.CreateRss(rss);
+                rssData.CreateRss(rss, async error => await DisplayAlert(Common.Error, error, "", Common.Ok));
             });
 
             MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "EditRss", (obj, rss) =>
             {
-                rssData.UpdateRss(rss);
+                rssData.UpdateRss(rss, async error => await DisplayAlert(Common.Error, error, "", Common.Ok));
                 RssList = new ObservableCollection<Rss>(RssList);
             });
 
             MessagingCenter.Subscribe<RssVM, Rss>(this, "RssFeedUpdated", (obj, rss) =>
             {
-                rssData.UpdateRss(rss);
+                rssData.UpdateRss(rss, async error => await DisplayAlert(Common.Error, error, "", Common.Ok));
             });
 
             cmdAdd = new RelayCommand(() => navigation.PushAsync(new AddNewRssPage()));
@@ -63,7 +63,7 @@ namespace RssReader.ViewModels
                         Common.Remove, Common.Cancel))
                     {
                         RssList.Remove(rss);
-                        rssData.DeleteRss(rss);
+                        rssData.DeleteRss(rss, async error => await DisplayAlert(Common.Error, error, "", Common.Ok));
                     }
                 }
             });

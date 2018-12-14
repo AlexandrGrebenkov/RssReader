@@ -1,16 +1,15 @@
 ﻿using RssReader.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RssReader.Services.Abstract
 {
     public interface IRssData
     {
-        IEnumerable<Rss> GetRssList();
+        IEnumerable<Rss> GetRssList(Action<string> errorHandler = null);
 
-        void CreateRss(Rss rss);
-        void UpdateRss(Rss rss);
-        void DeleteRss(Rss rss);
+        void CreateRss(Rss rss, Action<string> errorHandler = null);
+        void UpdateRss(Rss rss, Action<string> errorHandler = null);
+        void DeleteRss(Rss rss, Action<string> errorHandler = null);
     }
 }

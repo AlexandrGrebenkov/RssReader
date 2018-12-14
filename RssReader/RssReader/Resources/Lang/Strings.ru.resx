@@ -123,6 +123,9 @@
   <data name="ComeBack" xml:space="preserve">
     <value>Вернуться назад</value>
   </data>
+  <data name="DbError" xml:space="preserve">
+    <value>Ошибка базы данных</value>
+  </data>
   <data name="ExitWithoutSaving" xml:space="preserve">
     <value>Выйти без сохранения</value>
   </data>

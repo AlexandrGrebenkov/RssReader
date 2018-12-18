@@ -4,6 +4,7 @@ using RssReader.Services.Abstract;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System;
+using RssReader.Resources.Lang;
 
 namespace RssReader.Services
 {
@@ -47,7 +48,7 @@ namespace RssReader.Services
 #if DEBUG
                 errorHandler?.Invoke(ex.Message);
 #else
-                errorhandler?.Invoke(Strings.DbError);
+                errorHandler?.Invoke(Strings.DbError);
 #endif
             }
         }
@@ -70,7 +71,7 @@ namespace RssReader.Services
 #if DEBUG
                 errorHandler?.Invoke(ex.Message);
 #else
-                errorhandler?.Invoke(Strings.DbError);
+                errorHandler?.Invoke(Strings.DbError);
 #endif
             }
         }
@@ -90,7 +91,7 @@ namespace RssReader.Services
 #if DEBUG
                 errorHandler?.Invoke(ex.Message);
 #else
-                errorhandler?.Invoke(Strings.DbError);
+                errorHandler?.Invoke(Strings.DbError);
 #endif
             }
             return list;
@@ -114,7 +115,7 @@ namespace RssReader.Services
 #if DEBUG
                 errorHandler?.Invoke(ex.Message);
 #else
-                errorhandler?.Invoke(Strings.DbError);
+                errorHandler?.Invoke(Strings.DbError);
 #endif
             }
         }

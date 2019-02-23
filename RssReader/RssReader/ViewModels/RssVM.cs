@@ -1,12 +1,11 @@
 ﻿using Helpers;
 using RssReader.Models;
 using RssReader.Resources.Lang;
+using RssReader.Services.Abstract;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Xml.Linq;
 using Xamarin.Forms;
 
 namespace RssReader.ViewModels
@@ -14,8 +13,8 @@ namespace RssReader.ViewModels
     /// <summary>Вью-модель для просмотра Rss-ленты</summary>
     class RssVM : BaseViewModel
     {
-        /// <summary></summary>
-        HttpClient client;
+        IXmlFeedParser Parser { get; }
+        INetworkWorker NetworkWorker { get; }
 
         /// <summary>Rss-канал</summary>
         Rss Rss { get; }
@@ -32,9 +31,11 @@ namespace RssReader.ViewModels
             }
         }
 
-        public RssVM(Rss rss)
+        public RssVM(Rss rss, IXmlFeedParser parser, INetworkWorker networkWorker)
         {
             Rss = rss;
+            Parser = parser;
+            NetworkWorker = networkWorker;
             Title = Rss.Name;
 
             // Обновляем ленту при открытии
@@ -71,56 +72,9 @@ namespace RssReader.ViewModels
         /// <param name="rssLink">Ссылка на Rss-канал</param>
         /// <param name="errorhandler">Обработчик ошибок</param>
         async Task<IEnumerable<RssMessage>> GetRssFeed(string rssLink, Action<string> errorhandler = null)
-        {// TODO: Разбить на 2 метода
-            var feed = string.Empty;
-            List<RssMessage> messages = null;
-            try
-            {// Запрос XML ленты
-                if (client == null)
-                    client = new HttpClient();
-                feed = await client.GetStringAsync(rssLink);
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                errorhandler?.Invoke(ex.Message);
-#else
-                errorhandler?.Invoke(Strings.NetworkProblems);
-#endif
-                return null;
-            }
-
-            try
-            {// Разбор полученной XML ленты
-                if (string.IsNullOrEmpty(feed)) return null;
-
-                var parsedFeed = XElement.Parse(feed);
-                messages = new List<RssMessage>();
-
-                foreach (var item in parsedFeed?.Element("channel")?.Elements("item"))
-                {
-                    var title = item.Element("title");
-                    var link = item.Element("link");
-                    var text = item.Element("description");
-                    var date = item.Element("pubDate");
-
-                    if (date != null && !DateTime.TryParse(date.Value, out var dt))
-                        dt = DateTime.MinValue;
-                    else
-                        dt = DateTime.MinValue;
-
-                    messages.Add(new RssMessage(title?.Value, text?.Value, dt, link?.Value));
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                errorhandler?.Invoke(ex.Message);
-#else
-                errorhandler?.Invoke(Strings.ParsingXmlProblems);
-#endif
-                return null;
-            }
+        {
+            var feed = await NetworkWorker.GetFeedStringAsync(rssLink, errorhandler);
+            var messages = new List<RssMessage>(Parser.ParseXml(feed));
 
             return messages;
         }

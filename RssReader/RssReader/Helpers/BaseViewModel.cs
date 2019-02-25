@@ -28,6 +28,9 @@ namespace Helpers
         public delegate Task<bool> DisplayAlertFromVM(string title, string message, string ok, string cancel);
         public DisplayAlertFromVM DisplayAlert;
 
+        public delegate Task DisplaySimpleAlertFromVM(string title, string message, string cancel);
+        public DisplaySimpleAlertFromVM DisplaySimpleAlert;
+
         public delegate Task<string> DisplayActionSheetFromVM(string title, string cancel, string destruction, params string[] buttons);
         public DisplayActionSheetFromVM DisplayActionSheet;
 

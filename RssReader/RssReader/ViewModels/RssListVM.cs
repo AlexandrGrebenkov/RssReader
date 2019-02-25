@@ -22,24 +22,24 @@ namespace RssReader.ViewModels
         public RssListVM(INavigation navigation, IRssData rssData)
         {
             Title = Titles.RssList;
-            RssList = new ObservableCollection<Rss>(rssData.GetRssList(async error => await DisplayAlert(Common.Error, error, "", Common.Ok)));
+            RssList = new ObservableCollection<Rss>(rssData.GetRssList(async error => await DisplaySimpleAlert(Common.Error, error, Common.Ok)));
 
             MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "AddRss", (obj, rss) =>
             {
                 if (RssList == null) return;
                 RssList.Add(rss);
-                rssData.CreateRss(rss, async error => await DisplayAlert(Common.Error, error, "", Common.Ok));
+                rssData.CreateRss(rss, async error => await DisplaySimpleAlert(Common.Error, error, Common.Ok));
             });
 
             MessagingCenter.Subscribe<AddNewRssVM, Rss>(this, "EditRss", (obj, rss) =>
             {
-                rssData.UpdateRss(rss, async error => await DisplayAlert(Common.Error, error, "", Common.Ok));
+                rssData.UpdateRss(rss, async error => await DisplaySimpleAlert(Common.Error, error, Common.Ok));
                 RssList = new ObservableCollection<Rss>(RssList);
             });
 
             MessagingCenter.Subscribe<RssVM, Rss>(this, "RssFeedUpdated", (obj, rss) =>
             {
-                rssData.UpdateRss(rss, async error => await DisplayAlert(Common.Error, error, "", Common.Ok));
+                rssData.UpdateRss(rss, async error => await DisplaySimpleAlert(Common.Error, error, Common.Ok));
             });
 
             cmdAdd = new RelayCommand(() => navigation.PushAsync(new AddNewRssPage()));
@@ -49,7 +49,7 @@ namespace RssReader.ViewModels
             cmdContextAction = new Command<Rss>(async rss =>
             {
                 var answer = await DisplayActionSheet($"{Strings.FeedAction} \"{rss.Name}\"",
-                    Common.Cancel, "",
+                    Common.Cancel, null,
                     Common.Edit, Common.Remove);
 
                 if (answer == Common.Edit)
@@ -63,7 +63,7 @@ namespace RssReader.ViewModels
                         Common.Remove, Common.Cancel))
                     {
                         RssList.Remove(rss);
-                        rssData.DeleteRss(rss, async error => await DisplayAlert(Common.Error, error, "", Common.Ok));
+                        rssData.DeleteRss(rss, async error => await DisplaySimpleAlert(Common.Error, error, Common.Ok));
                     }
                 }
             });

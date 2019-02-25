@@ -49,7 +49,7 @@ namespace RssReader.Views
             if (VM.IsChanged && VM.CanSave)
             {// Данные изменились и можем сохранить
                 var answer = await DisplayActionSheet(Strings.SaveChanges,
-                            Common.Cancel, "",
+                            Common.Cancel, null,
                             Strings.SaveAndExit, Strings.ExitWithoutSaving);
                 if (answer == Strings.SaveAndExit)
                 {
@@ -98,6 +98,9 @@ namespace RssReader.Views
 
         async Task<bool> DisplayAlertFromVM(string title, string message, string ok, string cancel) =>
             await DisplayAlert(title, message, ok, cancel);
+
+        async Task DisplayAlertFromVM(string title, string message, string cancel) =>
+            await DisplayAlert(title, message, cancel);
 
         async Task<string> DisplayActionSheetFromVM(string title, string cancel, string destruction, params string[] buttons) =>
             await DisplayActionSheet(title, cancel, destruction, buttons);

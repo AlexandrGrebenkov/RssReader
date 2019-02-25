@@ -6,6 +6,7 @@
         <ResourceDictionary>
             <!--Цвета-->
             <Color x:Key="clrBackground">#EEE</Color>
+            <Color x:Key="clrPrimary">#4CAF50</Color>
             <Color x:Key="clrBlue">#2196F3</Color>
 
             <!--Text-->

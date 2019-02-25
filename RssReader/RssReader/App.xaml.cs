@@ -11,12 +11,16 @@ namespace RssReader
     {
         public App()
         {
-            RssReader.Resources.Lang.Common.Culture = CrossMultilingual.Current.DeviceCultureInfo; 
-            RssReader.Resources.Lang.Titles.Culture = CrossMultilingual.Current.DeviceCultureInfo; 
+            RssReader.Resources.Lang.Common.Culture = CrossMultilingual.Current.DeviceCultureInfo;
+            RssReader.Resources.Lang.Titles.Culture = CrossMultilingual.Current.DeviceCultureInfo;
 
             InitializeComponent();
 
-            MainPage = new NavigationPage(new RssListPage());
+            MainPage = new NavigationPage(new RssListPage())
+            {
+                BarBackgroundColor = (Color)Current.Resources["clrPrimary"],
+                BarTextColor = (Color)Current.Resources["clrTextInvert"],
+            };
         }
 
         protected override void OnStart()
